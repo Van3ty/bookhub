@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>📝 Create Account</h2>
+<hr>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <p>
+        <label>Username</label><br>
+        <input type="text" name="username" style="width:100%; padding:10px;">
+    </p>
+
+    <p>
+        <label>Password</label><br>
+        <input type="password" name="password1" style="width:100%; padding:10px;">
+    </p>
+
+    <p>
+        <label>Confirm Password</label><br>
+        <input type="password" name="password2" style="width:100%; padding:10px;">
+    </p>
+
+    <button type="submit" style="padding:10px 20px;">
+        Register
+    </button>
+
+</form>
+
+<p>
+    Already have an account?
+    <a href="{% url 'login' %}">Login here</a>
+</p>
+
+{% endblock %}
