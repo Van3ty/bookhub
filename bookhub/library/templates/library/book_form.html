@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>
+    {% if form.instance.pk %}
+        Edit Book
+    {% else %}
+        Add Book
+    {% endif %}
+</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        {% if form.instance.pk %}
+            Update Book
+        {% else %}
+            Save Book
+        {% endif %}
+    </button>
+</form>
+
+{% endblock %}
