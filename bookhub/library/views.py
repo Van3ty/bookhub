@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from .models import Book
-from .forms import BookForm
+from .forms import BookForm, ReviewForm
 
 def book_list(request):
     books = Book.objects.all()
@@ -10,7 +10,8 @@ def book_list(request):
 
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
-    return render(request, "library/book_detail.html", {"book": book})
+    reviews = book.reviews.all().order_by("-created_at")
+    return render(request, "library/book_detail.html", {"book": book, "reviews": reviews})
 
 @login_required(login_url="login")
 def add_book(request):
@@ -48,3 +49,23 @@ def delete_book(request, book_id):
         return redirect("book_list")
 
     return render(request, "library/delete_book.html", {"book": book})
+
+
+@login_required(login_url="login")
+def add_review(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.book = book
+            review.user = request.user
+            review.save()
+            return redirect("book_detail", book_id=book.id)
+
+    else:
+        form = ReviewForm()
+
+    return render(request, "library/review_form.html", {"form": form, "book": book})

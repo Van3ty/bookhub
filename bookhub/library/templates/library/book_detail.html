@@ -7,9 +7,7 @@
 <hr>
 
 <p><strong>Author:</strong> {{ book.author }}</p>
-
 <p><strong>Category:</strong> {{ book.category }}</p>
-
 <p><strong>Price:</strong> ${{ book.price }}</p>
 
 <br>
@@ -22,7 +20,7 @@
         border-radius:8px;
         text-decoration:none;
         font-weight:bold;">
-    ✏️ Edit
+    Edit
 </a>
 
 <a href="{% url 'delete_book' book.id %}"
@@ -34,13 +32,39 @@
         text-decoration:none;
         font-weight:bold;
         margin-left:10px;">
-    🗑 Delete
+    Delete
 </a>
 
 <br><br>
 
+<hr>
+
+<h2>Reviews</h2>
+
+{% if user.is_authenticated %}
+    <p>
+        <a href="{% url 'add_review' book.id %}">Add Review</a>
+    </p>
+{% else %}
+    <p>
+        <a href="{% url 'login' %}">Login</a> to add a review.
+    </p>
+{% endif %}
+
+{% for review in reviews %}
+    <div style="border-bottom:1px solid #ddd; padding:10px 0;">
+        <strong>{{ review.user.username }}</strong>
+        rated this {{ review.rating }}/5
+        <p>{{ review.text }}</p>
+    </div>
+{% empty %}
+    <p>No reviews yet.</p>
+{% endfor %}
+
+<br>
+
 <a href="{% url 'book_list' %}">
-    ← Back to Books
+    Back to Books
 </a>
 
 {% endblock %}
