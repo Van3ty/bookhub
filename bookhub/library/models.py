@@ -25,3 +25,11 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user} review for {self.book}"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['book', 'user'], 
+                name='unique_review_per_user_per_book'
+            )
+        ]

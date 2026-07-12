@@ -54,6 +54,11 @@ def delete_book(request, book_id):
 @login_required(login_url="login")
 def add_review(request, book_id):
     book = get_object_or_404(Book, id=book_id)
+    
+    existing_review = book.reviews.filter(user=request.user).first()
+
+    if existing_review:
+        return redirect("book_detail", book_id=book.id)
 
     if request.method == "POST":
         form = ReviewForm(request.POST)
